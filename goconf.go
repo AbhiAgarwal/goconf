@@ -28,10 +28,10 @@ func getConfiguration(fullPath string) map[string]interface{} {
 		for i := 0; i < len(splitLine); i++ {
 			splitLine[i] = strings.Trim(splitLine[i], " ")
 		}
-		if isInteger, err := strconv.Atoi(splitLine[1]); err == nil {
-			allLines[splitLine[0]] = isInteger
-		} else {
+		if splitLineConverted, err := strconv.Atoi(splitLine[1]); err != nil {
 			allLines[splitLine[0]] = splitLine[1]
+		} else {
+			allLines[splitLine[0]] = splitLineConverted
 		}
 	}
 
