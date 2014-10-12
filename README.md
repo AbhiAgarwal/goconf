@@ -21,3 +21,11 @@ func main() {
 	fmt.Println(parsedData)
 }
 ```
+
+Sample configuration file:
+
+```
+HELLO_KEY = 4
+API_NESS = 128328
+GOOGLIE = string
+```
