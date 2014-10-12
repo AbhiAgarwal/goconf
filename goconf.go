@@ -4,22 +4,19 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func getConfiguration(fullPath string) map[string]string {
+func getConfiguration(fullPath string) map[string]interface{} {
 	inputFile, err := os.Open(fullPath)
-	check(err)
+	if err != nil {
+		panic(err)
+	}
 	defer inputFile.Close()
 
-	var allLines map[string]string
-	allLines = make(map[string]string)
+	var allLines map[string]interface{}
+	allLines = make(map[string]interface{})
 	scanner := bufio.NewScanner(inputFile)
 
 	for scanner.Scan() {
@@ -31,7 +28,11 @@ func getConfiguration(fullPath string) map[string]string {
 		for i := 0; i < len(splitLine); i++ {
 			splitLine[i] = strings.Trim(splitLine[i], " ")
 		}
-		allLines[splitLine[0]] = splitLine[1]
+		if isInteger, err := strconv.Atoi(splitLine[1]); err == nil {
+			allLines[splitLine[0]] = isInteger
+		} else {
+			allLines[splitLine[0]] = splitLine[1]
+		}
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -41,9 +42,11 @@ func getConfiguration(fullPath string) map[string]string {
 	return allLines
 }
 
-func Parse(fileName string) map[string]string {
+func Parse(fileName string) map[string]interface{} {
 	path, err := os.Getwd()
-	check(err)
+	if err != nil {
+		panic(err)
+	}
 	path += ("/" + fileName)
 	return getConfiguration(path)
 }
